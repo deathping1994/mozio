@@ -1,6 +1,26 @@
 # Mozio- Provider service
 Provider service stores details of providers and performs search query on their service area.
 It also allows user to update service area
+# Current Status
+It's almost time for submission so I am dropping an update.
+- The api part is done with some known issues. 
+- Code is available at https://github.com/deathping1994/mozio
+- I'll be Deploying the source code on aws instance in a few hours
+## Some choices and assumptions:
+- I've used mongodb along with mongoengine
+- Turns out mongoengine was a bad choice but I had to use it to stick to django ORM, - - alternative could have been using pymongo and enforcing the model validation manually
+- I chose mongodb due to it's geo-spatial querying capabilities
+- For Caching I've used redis
+- I've assumed there would be some authentication method in place so I've not implemented and authentication
+- If I were to implement something then it would have been token based authentication with token cached into redis
+## Challenges:
+- It was my first time trying to integrate mongodb and django so the basic setup took more time than expected
+- I've never worked with geoJson before so figuring out the types of geometry took some time but it was quick 
+- It was my second time trying to write unit tests with mongodb and Django and it is something I haven't figured out yet :(
+## Known issues:
+- Deleting and updating the service area has not been tested well
+- Both these functions fail silently due to some issue related to mongoengine
+- I could not get test to run successfully because of the mongoengine not playing nice with django test runner, tests are written but partial
 
 ## Models: Provider 
  Stores details of Provider
