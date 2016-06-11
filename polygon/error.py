@@ -32,6 +32,9 @@ def error_handler(e):
     elif isinstance(e, ValueError):
         response['error'] = str(e)
         response['stat'] = 400
+    elif isinstance(e, OperationError):
+        response['error'] = str(e)
+        response['stat'] = 400
     else:
         response['error'] = "Something went wrong"
         response['stat'] = 500

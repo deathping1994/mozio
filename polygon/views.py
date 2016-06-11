@@ -40,7 +40,7 @@ def service_provider(request, id= ''):
         if request.method == "POST":
             data = json.loads(request.body)
             provider = Provider(name=data['name'], email=data['email'], phone=data['phone'],
-                                currency=data['currency'], service_area=[])
+                                currency=data['currency'])
             provider.save()
             return json_response(provider.to_json(), 201)
         if request.method == "GET":
@@ -99,12 +99,14 @@ def update_service_area(request,id):
             for line_string in data['service_area']:
                 poly_list.append(line_string)
             provider.service_area['coordinates'].append(poly_list)
+            provider.service_area= provider.service_area['coordinates']
             provider.save()
             return json_response(provider.to_json(), 200)
         elif request.method == "DELETE":
             for line_string in data['service_area']:
                 if line_string in provider.service_area['coordinates']:
                     provider.service_area['coordinates'].remove(line_string)
+                provider.service_area=provider.service_area['coordinates']
             provider.save()
             return json_response(provider.to_json(), 200)
         else:
