@@ -3,7 +3,7 @@ Provider service stores details of providers and performs search query on their 
 It also allows user to update service area
 # Current Status
 It's almost time for submission so I am dropping an update.
-- The api part is done with some known issues. 
+- The api part is done and there are some known issues.
 - Code is available at https://github.com/deathping1994/mozio
 - I'll be Deploying the source code on aws instance in a few hours
 ## Some choices and assumptions:
