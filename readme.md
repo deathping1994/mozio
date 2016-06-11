@@ -1,4 +1,5 @@
 # Mozio- Provider service
+# Update[11/06/2016 9:58pm IST]: I'll not be deploying this to aws because I don't have enough memory left on ews to install mongodb
 Provider service stores details of providers and performs search query on their service area.
 It also allows user to update service area
 # Current Status
