@@ -1,4 +1,5 @@
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.cache import cache_page
 from models import Provider
 from mongoengine import *
 from error import *
@@ -111,6 +112,8 @@ def update_service_area(request,id):
     except Exception as e:
         return error_handler(e)
 
+
+@cache_page(60 * 15)        #Cache response in Redis for 15 minutes
 @csrf_exempt
 def search(request):
     try:
