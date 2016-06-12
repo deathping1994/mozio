@@ -1,5 +1,6 @@
 # Mozio- Provider service
-# Update[11/06/2016 9:58pm IST]: I'll not be deploying this to aws because I don't have enough memory left on ews to install mongodb
+## Update[11/06/2016 11:19pm IST] Api is live at http://mozio.gauravshukla.xyz:8080/
+### <s>Update[11/06/2016 9:58pm IST]: I'll not be deploying this to aws because I don't have enough memory left on ews to install mongodb </s>
 Provider service stores details of providers and performs search query on their service area.
 It also allows user to update service area
 # Current Status
@@ -67,7 +68,47 @@ It's almost time for submission so I am dropping an update.
         return json_response(json.dumps(response), response['stat'])
 
 ## Api End Points
-### endpoint: /provider/<id>/
+### endpoint: /provider/search/?lat={{latitude}}&&long={{longitude}}
+    *** method: GET *** 
+            response: Array of Service Provider objects that provide service at that lat,long
+            eg : mozio.gauravshukla.xyz:8080/provider/search/?lat=5&&long=5.001
+            response:
+             [
+          {
+            "name": "Jytoi SHukla",
+            "currency": "INR",
+            "service_area": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    10,
+                    10
+                  ],
+                  [
+                    10,
+                    0
+                  ],
+                  [
+                    0,
+                    0
+                  ]
+                ]
+              ]
+            },
+            "phone": "+91842343",
+            "_cls": "Provider",
+            "_id": {
+              "$oid": "575c4d35a4fabe6cee145a53"
+            },
+            "email": "gaura.dhuk@m.com"
+          }
+        ]
+### endpoint: /provider/:id:/
         *** method: GET ***
         response: Service provider object stored in Database
         eg: http://localhost:8000/provider/575be1380341ac5a66a4a647/ 
@@ -236,7 +277,7 @@ It's almost time for submission so I am dropping an update.
           }
         ]
 
-### endpoint: /provider/<id>/area/
+### endpoint: /provider/:id:/area/
         *** method: GET ***
         response: Service area of service provider with id passes in url
         eg: localhost:8000/provider/575be1380341ac5a66a4a647/area/
