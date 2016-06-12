@@ -9,8 +9,6 @@ import json
 
 def test(request):
     """Random function to test if django setup working"""
-    import pdb
-    pdb.set_trace()
     provider = Provider.objects.all()
     print provider
     res= {"re":"dsd"}
