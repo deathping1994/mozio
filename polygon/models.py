@@ -8,10 +8,10 @@ import re
 class Provider(Document):
     name = StringField(max_length=30)
     email = EmailField(unique=True)
-    phone = StringField(max_length=12)
+    phone = StringField(max_length=13)
     lang = StringField()
     currency = StringField(max_length=10)
-    service_area = PolygonField()
+    service_area = ListField(PolygonField())
 
     meta = {'allow_inheritance': True}
 

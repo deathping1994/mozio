@@ -38,7 +38,7 @@ def service_provider(request, id= ''):
         if request.method == "POST":
             data = json.loads(request.body)
             provider = Provider(name=data['name'], email=data['email'], phone=data['phone'],
-                                currency=data['currency'])
+                                currency=data['currency'],service_area=[])
             provider.save()
             return json_response(provider.to_json(), 201)
         if request.method == "GET":
@@ -88,23 +88,22 @@ def update_service_area(request,id):
             return json_response(json.dumps(provider.service_area), 200)
         data= json.loads(request.body)
         if request.method == "POST":
-            provider.service_area= data['service_area']
+            provider.service_area = []
+            for poly in data['service_area']:
+                provider.service_area.append(poly)
             provider.save()
             return json_response(provider.to_json(), 201)
 
         elif request.method == "PUT":
-            poly_list = list()
-            for line_string in data['service_area']:
-                poly_list.append(line_string)
-            provider.service_area['coordinates'].append(poly_list)
-            provider.service_area= provider.service_area['coordinates']
+            for poly in data['service_area']:
+                provider.service_area.append(poly)
             provider.save()
             return json_response(provider.to_json(), 200)
         elif request.method == "DELETE":
-            for line_string in data['service_area']:
-                if line_string in provider.service_area['coordinates']:
-                    provider.service_area['coordinates'].remove(line_string)
-                provider.service_area=provider.service_area['coordinates']
+            for poly in data['service_area']:
+                poly = {"type":"Polygon","coordinates":poly}
+                if poly in provider.service_area:
+                    provider.service_area.remove(poly)
             provider.save()
             return json_response(provider.to_json(), 200)
         else:
