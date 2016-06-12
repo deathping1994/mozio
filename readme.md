@@ -7,9 +7,9 @@ Provider service stores details of providers and performs search query on their 
 It also allows user to update service area
 # Current Status
 It's almost time for submission so I am dropping an update.
-- The api part is done and there are some known issues.
+- <s>The api part is done and there are some known issues.</s>
 - Code is available at https://github.com/deathping1994/mozio
-- I'll be Deploying the source code on aws instance in a few hours
+
 ## Some choices and assumptions:
 - I've used mongodb along with mongoengine
 - Turns out mongoengine was a bad choice but I had to use it to stick to django ORM, - - alternative could have been using pymongo and enforcing the model validation manually
@@ -22,9 +22,8 @@ It's almost time for submission so I am dropping an update.
 - I've never worked with geoJson before so figuring out the types of geometry took some time but it was quick 
 - It was my second time trying to write unit tests with mongodb and Django and it is something I haven't figured out yet :(
 ## Known issues:
-- Deleting and updating the service area has not been tested well
-- Both these functions fail silently due to some issue related to mongoengine
-- I could not get test to run successfully because of the mongoengine not playing nice with django test runner, tests are written but partial
+- <s>Deleting and updating the service area has not been tested well</s> FIXED
+- I could not get test to run successfully because of the mongoengine not playing nice with django test runner, tests are written but partial 
 
 ## Models: Provider 
  Stores details of Provider
@@ -35,7 +34,7 @@ It's almost time for submission so I am dropping an update.
         phone = StringField(max_length=12)
         lang = StringField()
         currency = StringField(max_length=10)
-        service_area = PolygonField()
+        service_area = ListField(PolygonField())
 
 ## Error Handler
 
@@ -223,61 +222,112 @@ It's almost time for submission so I am dropping an update.
         eg:
         Response:
         [
-          {
-            "lang": "INR",
-            "name": "Jytoi SHukla",
-            "phone": "+91842343",
-            "service_area": {
-              "type": "Polygon",
-              "coordinates": [
-                [
-                  [
-                    0,
-                    0
-                  ],
-                  [
-                    10,
-                    10
-                  ],
-                  [
-                    10,
-                    0
-                  ],
-                  [
-                    0,
-                    0
-                  ]
-                ]
-              ]
-            },
-            "currency": "YEN",
-            "_cls": "Provider",
-            "_id": {
-              "$oid": "575be1380341ac5a66a4a647"
-            },
-            "email": "gae.dhuk@m.com"
-          },
-          {
-            "lang": "INR",
-            "name": "Jytoi SHukla",
-            "phone": "+91842343",
-            "_cls": "Provider",
-            "_id": {
-              "$oid": "575be2970341ac5bcf7aa4be"
-            },
-            "email": "gaura.dhuk@m.com"
-          },
-          {
-            "name": "Jytoi SHukla",
-            "currency": "INR",
-            "phone": "+91842343",
-            "_cls": "Provider",
-            "_id": {
-              "$oid": "575c263e0341ac14c13b28b3"
-            },
-            "email": "gaua.dhuk@m.com"
-          }
+  {
+    "name": "Gaurav SHukla",
+    "currency": "INR",
+    "service_area": [],
+    "phone": "+918375847862",
+    "_cls": "Provider",
+    "_id": {
+      "$oid": "575d1402a4fabe42b9b9b885"
+    },
+    "email": "gaua.dh@m.com"
+  },
+  {
+    "name": "Jytoi SHukla",
+    "currency": "INR",
+    "service_area": [
+      {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              43.9453125,
+              58.07787626787517
+            ],
+            [
+              43.9453125,
+              43.58039085560786
+            ],
+            [
+              52.03125,
+              48.69096039092549
+            ],
+            [
+              54.140625,
+              56.75272287205736
+            ],
+            [
+              43.9453125,
+              58.07787626787517
+            ]
+          ]
         ]
+      },
+      {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              79.1015625,
+              63.54855223203644
+            ],
+            [
+              123.74999999999999,
+              68.65655498475735
+            ],
+            [
+              119.88281249999999,
+              48.69096039092549
+            ],
+            [
+              83.3203125,
+              52.05249047600099
+            ],
+            [
+              92.8125,
+              45.089035564831036
+            ],
+            [
+              71.015625,
+              53.74871079689897
+            ],
+            [
+              75.9375,
+              58.63121664342478
+            ],
+            [
+              92.10937499999999,
+              56.36525013685606
+            ],
+            [
+              102.3046875,
+              61.10078883158897
+            ],
+            [
+              85.078125,
+              62.59334083012024
+            ],
+            [
+              75.234375,
+              60.58696734225869
+            ],
+            [
+              79.1015625,
+              63.54855223203644
+            ]
+          ]
+        ]
+      }
+    ],
+    "phone": "+918423438900",
+    "_cls": "Provider",
+    "_id": {
+      "$oid": "575d138ca4fabe42b9b9b884"
+    },
+    "email": "gaua.dhuk@m.com"
+  }
+]
 
 ### endpoint: /provider/:id:/area/
         *** method: GET ***
@@ -308,7 +358,7 @@ It's almost time for submission so I am dropping an update.
             }
     
         *** method: Post ***
-        body: Json (service_area: <array of valid polygon line strings>)
+        body: Json (service_area: <array of valid polygon coordinate>)
         response: 200, Updated Service provider object
 ### Notice that service area must be valid GeoJson Polygon Line String
         eg: localhost:8000/provider/575be1380341ac5a66a4a647/area/
@@ -370,12 +420,12 @@ It's almost time for submission so I am dropping an update.
               }
             }
         *** method: PUT ***
-        body: Json (service_area: <line strings to add in existing polygon>)
+        body: Json (service_area: <Polygon strings to add in existing polygon list>)
         response: 200, Updated Service Provider Object
         eg:
             Body: {
                  "service_area":
-                      [
+                      [[
                         [
                           3,
                           0
@@ -392,95 +442,15 @@ It's almost time for submission so I am dropping an update.
                           3,
                           0
                         ]
-                      ]
+                      ]]
                       
                 }
-            Response: {
-              "_id": {
-                "$oid": "575be1380341ac5a66a4a647"
-              },
-              "_cls": "Provider",
-              "name": "Jytoi SHukla",
-              "email": "gae.dhuk@m.com",
-              "phone": "+91842343",
-              "lang": "INR",
-              "currency": "YEN",
-              "service_area": {
-                "type": "Polygon",
-                "coordinates": [
-                  [
-                    [
-                      0,
-                      0
-                    ],
-                    [
-                      10,
-                      11
-                    ],
-                    [
-                      12,
-                      13
-                    ],
-                    [
-                      0,
-                      0
-                    ]
-                  ],
-                  [
-                    [
-                      3,
-                      0
-                    ],
-                    [
-                      10,
-                      11
-                    ],
-                    [
-                      17,
-                      13
-                    ],
-                    [
-                      3,
-                      0
-                    ]
-                  ]
-                ]
-              }
-            }
-        or
-            {
-     "service_area":
-          [
-            [
-              1.2,
-              0.1
-            ],
-            [
-              1.3,
-              0.3
-            ],
-            [
-              1.4,
-              0.4
-            ],
-            [
-              1.2,
-              0.1
-            ]
-          ]
-          
-    }
-    
-    {
-      "stat": 400,
-      "error": "Could not save document (Can't extract geo keys: { _id: ObjectId('575be2970341ac5bcf7aa4be'), _cls: \"Provider\", name: \"Jytoi SHukla\", email: \"gaura.dhuk@m.com\", phone: \"+91842343\", lang: \"INR\", service_area: { type: \"Polygon\", coordinates: [ [ [ 1, 0 ], [ 10, 11 ], [ 12, 13 ], [ 1, 0 ] ], [ [ 1.2, 0.1 ], [ 1.3, 0.3 ], [ 1.4, 0.4 ], [ 1.2, 0.1 ] ] ] } }  Secondary loops not contained by first exterior loop - secondary loops must be holes: [ [ 1.2, 0.1 ], [ 1.3, 0.3 ], [ 1.4, 0.4 ], [ 1.2, 0.1 ] ] first loop: [ [ 1, 0 ], [ 10, 11 ], [ 12, 13 ], [ 1, 0 ] ])"
-    }
         *** method: Delete ***
-        body: Json(service_area: <line strings to delete from polygon>)
+        body: Json(service_area: <Polygon strings to delete from polygon list >)
         response: 200, Updated Service provider object with one line string removed
         eg: 
             Body:    {
-         "service_area":
+         "service_area":[
               [
                 [
                   0,
@@ -499,7 +469,7 @@ It's almost time for submission so I am dropping an update.
                   0
                 ]
               ]
-              
+              ]
         }
  .      Response:
             {
@@ -537,10 +507,3 @@ It's almost time for submission so I am dropping an update.
                 ]
               }
             }
-        or ## If you try to delete the only string present in the field
-                {
-      "stat": 400,
-      "error": "ValidationError (Provider:575be1380341ac5a66a4a647) (Invalid Polygon     must contain at least one valid linestring: ['service_area'])"
-    }
-    
-    
