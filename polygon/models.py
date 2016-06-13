@@ -11,7 +11,7 @@ class Provider(Document):
     phone = StringField(max_length=13)
     lang = StringField()
     currency = StringField(max_length=10)
-    service_area = ListField(PolygonField())
+    service_area = MultiPolygonField()
 
     meta = {'allow_inheritance': True}
 
@@ -19,7 +19,7 @@ class Provider(Document):
     def clean(self):
         msg_list = list()
         self.name = escape(strip_tags(self.name))
-        if not re.match("\+[0-9]*",self.phone):
+        if not re.match("\+[0-9]*", self.phone):
             msg_list.append("Valid phone number begins with + followed by country code and phone number")
             raise ValidationError(",".join(msg_list))
 
