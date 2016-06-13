@@ -1,4 +1,10 @@
 # Mozio- Provider service
+
+Master Branch contains List of polygons implementation for service area (Slightly slower)
+multipolygon Branch contains Multipolygon implementation for service area (can be made faster with geowithin query and 2dsphereindexes)
+
+Note: While using caching I've ignored thundering herd problem but that can be resolved using caceh.get_or_set()
+
 #### Cache expiry time is 15 minutes for search results so if the search results are not as expected then wait for 15 minutes
 #### All the known issues with delete and update service area have been fixed
 #### Update[11/06/2016 11:19pm IST] Api is live at http://mozio.gauravshukla.xyz:8080/
