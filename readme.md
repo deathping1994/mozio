@@ -1,7 +1,7 @@
 # Mozio- Provider service
 
-Master Branch contains List of polygons implementation for service area (Slightly slower)
-multipolygon Branch contains Multipolygon implementation for service area (can be made faster with geowithin query and 2dsphereindexes)
+- Master Branch contains List of polygons implementation for service area (Slightly slower)
+- multipolygon Branch contains Multipolygon implementation for service area (can be made faster with geowithin query and 2dsphereindexes)
 
 Note: While using caching I've ignored thundering herd problem but that can be resolved using caceh.get_or_set()
 
