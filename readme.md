@@ -7,8 +7,7 @@ Note: While using caching I've ignored thundering herd problem but that can be r
 
 #### Cache expiry time is 15 minutes for search results so if the search results are not as expected then wait for 15 minutes
 #### All the known issues with delete and update service area have been fixed
-#### Update[11/06/2016 11:19pm IST] Api is live at http://mozio.gauravshukla.xyz:8080/
-#### <s>Update[11/06/2016 9:58pm IST]: I'll not be deploying this to aws because I don't have enough memory left on ews to install mongodb </s>
+
 Provider service stores details of providers and performs search query on their service area.
 It also allows user to update service area
 # Current Status
